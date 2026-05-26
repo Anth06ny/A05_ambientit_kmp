@@ -27,6 +27,7 @@ import com.amonteiro.a05_ambientit_kmp.presentation.ui.screens.DetailScreen
 import com.amonteiro.a05_ambientit_kmp.presentation.ui.screens.SearchScreen
 import com.amonteiro.a05_ambientit_kmp.presentation.viewmodel.MainViewModel
 import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
 
 class Routes {
     @Serializable
@@ -44,7 +45,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     val navHostController: NavHostController = rememberNavController()
     //viewModel() en dehors de NavHost lie à l'Activité donc partagé entre les écrans
     //viewModel() dans le NavHost lié à la stack d'écran. Une instance par stack d'écran
-    val mainViewModel: MainViewModel = viewModel(){MainViewModel()}
+    val mainViewModel: MainViewModel = koinViewModel<MainViewModel>()
 
     //On observe la back stack comme un State pour que la TopAppBar se recompose à chaque navigation
     val currentBackStackEntry by navHostController.currentBackStackEntryAsState()

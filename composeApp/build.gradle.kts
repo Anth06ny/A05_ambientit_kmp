@@ -60,6 +60,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation("io.ktor:ktor-client-okhttp:3.4.2")
+
+            implementation("io.insert-koin:koin-android:4.1.+")
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -91,6 +93,11 @@ kotlin {
 
             //Navigation avec org.jetbrains spécifique à KPMP
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.+")
+
+            //Injection dépendance KOIN
+            implementation("io.insert-koin:koin-compose:4.1.+")
+            implementation("io.insert-koin:koin-compose-viewmodel:4.1.+")
+            implementation("io.insert-koin:koin-compose-viewmodel-navigation:4.1.+")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

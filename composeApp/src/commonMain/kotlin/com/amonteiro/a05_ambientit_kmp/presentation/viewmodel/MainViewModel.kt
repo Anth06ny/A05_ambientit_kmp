@@ -8,6 +8,7 @@ import com.amonteiro.a05_ambientit_kmp.data.remote.KtorWeatherApi
 import com.amonteiro.a05_ambientit_kmp.data.remote.TempEntity
 import com.amonteiro.a05_ambientit_kmp.data.remote.WeatherEntity
 import com.amonteiro.a05_ambientit_kmp.data.remote.WindEntity
+import com.amonteiro.a05_ambientit_kmp.di.initKoin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
@@ -18,7 +19,8 @@ import kotlin.time.Clock
 
 suspend fun main() {
 
-    val viewModel = MainViewModel()
+
+    val viewModel = initKoin().get<MainViewModel>()
     viewModel.loadWeathers("Pantin")
     while (viewModel.runInProgress.value) {
         println("Attente....")
@@ -29,12 +31,9 @@ suspend fun main() {
     println("List : ${viewModel.dataList.value}")
     println("ErrorMessage : ${viewModel.errorMessage.value}")
 
-
-    //Pour que le programme s'arrête, inutile sur Android
-    KtorWeatherApi.close()
 }
 
-class MainViewModel : ViewModel() {
+class MainViewModel(val ktorWeatherApi: KtorWeatherApi) : ViewModel() {
     //MutableStateFlow est une donnée observable
     val dataList = MutableStateFlow(emptyList<WeatherEntity>())
 //    val dataList = _dataList.asStateFlow()
@@ -61,7 +60,7 @@ class MainViewModel : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                dataList.value = KtorWeatherApi.loadWeathers(cityName)
+                dataList.value = ktorWeatherApi.loadWeathers(cityName)
             } catch (e: Exception) {
                 e.printStackTrace()
                 errorMessage.value = e.message ?: "Une erreur est survenue"

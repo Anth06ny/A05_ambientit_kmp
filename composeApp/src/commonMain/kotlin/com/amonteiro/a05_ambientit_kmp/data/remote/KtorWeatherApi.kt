@@ -1,6 +1,7 @@
 package com.amonteiro.a05_ambientit_kmp.data.remote
 
 import com.amonteiro.a05_ambientit_kmp.BuildConfig
+import com.amonteiro.a05_ambientit_kmp.di.initKoin
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
@@ -23,49 +24,25 @@ import kotlinx.serialization.json.Json
 
 //Suspend sera expliqué dans le chapitre des coroutines
 suspend fun main() {
-//    val res = KtorWeatherApi.loadWeathers("Nice").joinToString(separator = "\n") {
-//        it.getResume()
-//    }
-//
-//    print(res)
 
-    val myFlow = KtorWeatherApi.loadWeathersWithFlow("Nice", "Toulouse", "", "paris")
 
-    myFlow
-        .filter { it.wind.speed < 3 }
-        .map {
-            it.name + " wind : " + it.wind.speed
-        }
-        .catch { println("Ca a planté") }
-        .collect {
-            println(it)
-        }
+    val ktorWeatherApi = initKoin().get<KtorWeatherApi>()
+
+    val res = ktorWeatherApi.loadWeathers("Nice").joinToString(separator = "\n") {
+        it.getResume()
+    }
+
+    print(res)
 
 }
 
-object KtorWeatherApi {
-    private const val API_URL =
-        "https://api.openweathermap.org/data/2.5/find?appid=${BuildConfig.WEATHER_API_KEY}&units=metric&lang=fr"
-
-    //Création et réglage du client
-    private val client = HttpClient {
-        install(Logging) {
-            //(import io.ktor.client.plugins.logging.Logger)
-            logger = object : Logger {
-                override fun log(message: String) {
-                    println(message)
-                }
-            }
-            level = LogLevel.INFO  // TRACE, HEADERS, BODY, etc.
-        }
-        install(ContentNegotiation) {
-            json(Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
-        }
-        install(HttpTimeout) {
-            requestTimeoutMillis = 5000
-        }
-        //engine { proxy = ProxyBuilder.http("monproxy:1234") }
+class KtorWeatherApi(val client: HttpClient) {
+    companion object {
+        private const val API_URL =
+            "https://api.openweathermap.org/data/2.5/find?appid=${BuildConfig.WEATHER_API_KEY}&units=metric&lang=fr"
     }
+    //Création et réglage du client
+
 
     //GET Le JSON reçu sera parser en List<WeatherDTO>,
     //Crash si le JSON ne correspond pas

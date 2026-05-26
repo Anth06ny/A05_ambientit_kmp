@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
+import com.amonteiro.a05_ambientit_kmp.data.remote.WeatherEntity
 import com.amonteiro.a05_ambientit_kmp.presentation.ui.theme.A26_04_ambientit_kotlinTheme
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -48,3 +49,6 @@ fun MyError(
         )
     }
 }
+
+@Composable
+expect fun WeatherGallery(modifier:Modifier = Modifier, list: List<WeatherEntity>, onPictureClick: (Int)->Unit)

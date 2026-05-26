@@ -53,6 +53,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.amonteiro.a05_ambientit_kmp.data.remote.WeatherEntity
 import com.amonteiro.a05_ambientit_kmp.presentation.ui.MyError
+import com.amonteiro.a05_ambientit_kmp.presentation.ui.WeatherGallery
 import com.amonteiro.a05_ambientit_kmp.presentation.ui.theme.A26_04_ambientit_kotlinTheme
 import com.amonteiro.a05_ambientit_kmp.presentation.viewmodel.MainViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -136,14 +137,8 @@ fun SearchScreen(
             CircularProgressIndicator()
         }
 
+        WeatherGallery(modifier = Modifier.weight(1f), list, onRowPictureClick)
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.weight(1f)
-        ) {
-            items(list.size) {
-                PictureRowItem(data = list[it], onRowPictureClick = onRowPictureClick)
-            }
-        }
 
         Row {
             Button(
@@ -174,6 +169,7 @@ fun SearchScreen(
         }
     }
 }
+
 
 @Composable
 fun SearchBar(

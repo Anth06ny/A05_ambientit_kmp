@@ -1,5 +1,6 @@
 package com.amonteiro.a05_ambientit_kmp.data.remote
 
+import com.amonteiro.a05_ambientit_kmp.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
@@ -44,7 +45,7 @@ suspend fun main() {
 
 object KtorWeatherApi {
     private const val API_URL =
-        "https://api.openweathermap.org/data/2.5/find?appid=b80967f0a6bd10d23e44848547b26550&units=metric&lang=fr"
+        "https://api.openweathermap.org/data/2.5/find?appid=${BuildConfig.WEATHER_API_KEY}&units=metric&lang=fr"
 
     //Création et réglage du client
     private val client = HttpClient {
